@@ -1,0 +1,20 @@
+.contactFormWrapper {
+  border: 1px solid;
+  padding: 15px;
+}
+.nameLabelWrapper {
+  margin-bottom: 5px;
+  font-size: 15px;
+  font-size: 25px;
+}
+.input {
+  margin-bottom: 30px;
+  font-size: 20px;
+}
+.btnAddContact {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+}
