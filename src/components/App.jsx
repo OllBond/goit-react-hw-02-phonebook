@@ -41,6 +41,15 @@ export class App extends Component {
       return { contacts: [newContact, ...contacts] };
     });
   };
+  removeContact(id) {
+    this.setState(({ contacts }) => {
+      // фільтр книг, який дає масив newContact
+      // який має сонтакти з id які не дорівнюють id, того, що ми видаляли
+      const newContact = contacts.filter(contact => contact.id !== id);
+      // в масив newContact потрапили контакти окрім того, який треба видалити
+      return { contacts: newContact };
+    });
+  }
   render() {
     const { handleSubmit, handleInputChange } = this;
     const { contacts } = this.state;
@@ -48,7 +57,13 @@ export class App extends Component {
       return (
         <li className={css.listItems} key={id}>
           {name}: {number}
-          <button className={css.btnDeleteContact} type="button">
+          <button
+            className={css.btnDeleteContact}
+            // анонімна функція де передаємо id контакту, щоб знати,
+            // який контакт видаляти
+            onClick={() => this.removeContact(id)}
+            type="button"
+          >
             Delete
           </button>
         </li>
