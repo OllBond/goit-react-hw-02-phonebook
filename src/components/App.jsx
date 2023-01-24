@@ -1,7 +1,7 @@
 import { Component } from 'react';
 // import ContactForm from './ContactForm/ContactForm';
-import css from './ContactForm/ContactForm.module.css';
 import { nanoid } from 'nanoid';
+import css from './ContactForm/ContactForm.module.css';
 export class App extends Component {
   state = {
     contacts: [
@@ -29,6 +29,10 @@ export class App extends Component {
   // і повертає масив старих контактів і новий
   handleSubmit = event => {
     event.preventDefault();
+    const { name, number } = this.state;
+    if (this.isDublicate({ name, number })) {
+      return alert(`${name}: ${number} is already in contacts`);
+    }
     // тут callback бо хочемо змінити масив у state
     this.setState(prevState => {
       const { name, number, contacts } = prevState;
@@ -52,9 +56,46 @@ export class App extends Component {
       return { contacts: newContact };
     });
   }
+  isDublicate({ name, number }) {
+    const normalizedName = name.toLowerCase();
+    const normalizedNumber = number.toLowerCase();
+    const { contacts } = this.state;
+    // щоб знайти елемент в масиві
+    // якщо знайщеться в contact буде об'єкт
+    // якщо не здайде - undefind
+    const result = contacts.find(({ name, number }) => {
+      return (
+        name.toLowerCase() === normalizedName &&
+        number.toLowerCase() === normalizedNumber
+      );
+    });
+    // на треба повернути або true або false
+    // булеве значення об'єкта - true
+    // булеве значення undefind - false
+    return Boolean(result);
+  }
+  getFilteredContacts() {
+    const { filter, contacts } = this.state;
+    // якщо фільтр пустий - повертати масив контактів не фільтрувати
+    if (!filter) {
+      return contacts;
+    }
+    const normalizedFilter = filter.toLowerCase();
+    const result = contacts.filter(({ name, number }) => {
+      return (
+        // якщо у name є ці кілька літер - вертає true
+        name.toLowerCase().includes(normalizedFilter) ||
+        // або якщо у number є ці кілька цифр - вертає true
+        number.toLowerCase().includes(normalizedFilter)
+      );
+    });
+    return result;
+  }
   render() {
     const { handleSubmit, handleInputChange } = this;
-    const { contacts, name, number } = this.state;
+    const { name, number } = this.state;
+    const contacts = this.getFilteredContacts();
+    // mapаємо відфільтровані книги
     const itemsContacts = contacts.map(({ id, name, number }) => {
       return (
         <li className={css.listItems} key={id}>
