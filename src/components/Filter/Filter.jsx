@@ -2,7 +2,7 @@ import css from './Filter.module.css';
 const Filter = ({ handleInputChange, value }) => {
   return (
     <div className={css.conactFormGroup}>
-      <label className="">Find contacts by name</label>
+      <label className={css.label}>Find contacts by name</label>
       <input
         className={css.input}
         // зв'язок інпуту і state

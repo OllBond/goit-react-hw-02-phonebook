@@ -1,9 +1,11 @@
 import { Component } from 'react';
-// import ContactForm from './ContactForm/ContactForm';
 import { nanoid } from 'nanoid';
+
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
+
+import css from './ContactForm/ContactForm.module.css';
 export class App extends Component {
   state = {
     contacts: [
@@ -38,7 +40,7 @@ export class App extends Component {
       // в об'єкт contacts записуємо новий контакт і всі попередні
       // обнуляю name і number, відбувається рендер
       // і у value inputa потрапляє пуста стока
-      return { contacts: [newContact, ...contacts], name: '', number: '' };
+      return { contacts: [newContact, ...contacts] };
     });
   };
   removeContact = id => {
@@ -92,10 +94,10 @@ export class App extends Component {
 
     return (
       <div>
-        <h1>Phonebook</h1>
+        <h1 className={css.title}>Phonebook</h1>
 
         <ContactForm onSubmit={handleSubmit} />
-        <h2>Contacts</h2>
+        <h2 className={css.title}>Contacts</h2>
         <Filter
           handleInputChange={handleFilter}
           // filterInputId={this.filterInputId}

@@ -1,12 +1,12 @@
 import { Component } from 'react';
+import initialState from './initialState';
 import css from './ContactForm.module.css';
 export class ContactForm extends Component {
   state = {
-    name: '',
-    number: '',
+    ...initialState,
   };
   // метод, який оновить state
-  // збирає дані
+  // функція збирає дані з кожного input
   handleInputChange = ({ target }) => {
     const { name, value } = target;
     this.setState({
@@ -16,15 +16,17 @@ export class ContactForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const { onSubmit } = this.props;
-    // передає state
-    // розпилення, щоб не мутували
+    // onSubmit кладе state в корзинку, віддає наверх
     onSubmit({ ...this.state });
+    // обнуляє
+    this.reset();
+  };
+  reset() {
     // обнуляє name і number
     this.setState({
-      name: '',
-      number: '',
+      ...initialState,
     });
-  };
+  }
   render() {
     const { handleInputChange, handleSubmit } = this;
     const { name, number } = this.state;
@@ -33,7 +35,7 @@ export class ContactForm extends Component {
         <div className={css.contactFormBlock}>
           <form className="" onSubmit={handleSubmit}>
             <div className={css.conactFormGroup}>
-              <label className="" htmlFor={this.nameInputId}>
+              <label className={css.label} htmlFor={this.nameInputId}>
                 Name
               </label>
               <input
@@ -50,7 +52,7 @@ export class ContactForm extends Component {
               />
             </div>
             <div className={css.conactFormGroup}>
-              <label className="" htmlFor={this.numberInputId}>
+              <label className={css.label} htmlFor={this.numberInputId}>
                 Number
               </label>
               <input
