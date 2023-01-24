@@ -38,7 +38,9 @@ export class App extends Component {
         number,
       };
       // в об'єкт contacts записуємо новий контакт і всі попередні
-      return { contacts: [newContact, ...contacts] };
+      // обнуляю name і number, відбувається рендер
+      // і у value inputa потрапляє пуста стока
+      return { contacts: [newContact, ...contacts], name: '', number: '' };
     });
   };
   removeContact(id) {
@@ -52,7 +54,7 @@ export class App extends Component {
   }
   render() {
     const { handleSubmit, handleInputChange } = this;
-    const { contacts } = this.state;
+    const { contacts, name, number } = this.state;
     const itemsContacts = contacts.map(({ id, name, number }) => {
       return (
         <li className={css.listItems} key={id}>
@@ -82,7 +84,7 @@ export class App extends Component {
                 <input
                   className={css.input}
                   // зв'язок інпуту і state
-                  value={this.state.name}
+                  value={name}
                   onChange={handleInputChange}
                   type="text"
                   name="name"
@@ -99,7 +101,7 @@ export class App extends Component {
                 <input
                   className={css.input}
                   // зв'язок інпуту і state
-                  value={this.state.number}
+                  value={number}
                   onChange={handleInputChange}
                   type="tel"
                   name="number"
