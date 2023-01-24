@@ -1,0 +1,11 @@
+.conactFormGroup {
+  display: grid;
+  gap: 15px;
+  margin-bottom: 5px;
+  font-size: 25px;
+}
+
+.input {
+  margin-bottom: 30px;
+  font-size: 30px;
+}

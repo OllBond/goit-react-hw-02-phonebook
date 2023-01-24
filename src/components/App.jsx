@@ -1,7 +1,9 @@
 import { Component } from 'react';
 // import ContactForm from './ContactForm/ContactForm';
 import { nanoid } from 'nanoid';
-import css from './ContactForm/ContactForm.module.css';
+import ContactForm from './ContactForm/ContactForm';
+import Filter from './Filter/Filter';
+import ContactList from './ContactList/ContactList';
 export class App extends Component {
   state = {
     contacts: [
@@ -11,31 +13,23 @@ export class App extends Component {
       { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
   nameInputId = nanoid();
   numberInput = nanoid();
   filterInput = nanoid();
 
-  // метод, який оновить state
-  handleInputChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value,
-    });
+  handleFilter = ({ target }) => {
+    this.setState({ filter: target.value });
   };
   // функція створює новий контакт newContact
   // і повертає масив старих контактів і новий
-  handleSubmit = event => {
-    event.preventDefault();
-    const { name, number } = this.state;
+  handleSubmit = ({ name, number }) => {
     if (this.isDublicate({ name, number })) {
       return alert(`${name}: ${number} is already in contacts`);
     }
     // тут callback бо хочемо змінити масив у state
     this.setState(prevState => {
-      const { name, number, contacts } = prevState;
+      const { contacts } = prevState;
       const newContact = {
         id: nanoid(),
         name,
@@ -47,7 +41,7 @@ export class App extends Component {
       return { contacts: [newContact, ...contacts], name: '', number: '' };
     });
   };
-  removeContact(id) {
+  removeContact = id => {
     this.setState(({ contacts }) => {
       // фільтр книг, який дає масив newContact
       // який має сонтакти з id які не дорівнюють id, того, що ми видаляли
@@ -55,7 +49,7 @@ export class App extends Component {
       // в масив newContact потрапили контакти окрім того, який треба видалити
       return { contacts: newContact };
     });
-  }
+  };
   isDublicate({ name, number }) {
     const normalizedName = name.toLowerCase();
     const normalizedNumber = number.toLowerCase();
@@ -92,93 +86,22 @@ export class App extends Component {
     return result;
   }
   render() {
-    const { handleSubmit, handleInputChange } = this;
-    const { name, number } = this.state;
+    const { handleSubmit, handleFilter, removeContact } = this;
+    const { filter } = this.state;
     const contacts = this.getFilteredContacts();
-    // mapаємо відфільтровані книги
-    const itemsContacts = contacts.map(({ id, name, number }) => {
-      return (
-        <li className={css.listItems} key={id}>
-          {name}: {number}
-          <button
-            className={css.btnDeleteContact}
-            // анонімна функція де передаємо id контакту, щоб знати,
-            // який контакт видаляти
-            onClick={() => this.removeContact(id)}
-            type="button"
-          >
-            Delete
-          </button>
-        </li>
-      );
-    });
+
     return (
       <div>
         <h1>Phonebook</h1>
-        <div className={css.wrapper}>
-          <div className={css.contactFormBlock}>
-            <form className="" onSubmit={handleSubmit}>
-              <div className={css.conactFormGroup}>
-                <label className="" htmlFor={this.nameInputId}>
-                  Name
-                </label>
-                <input
-                  className={css.input}
-                  // зв'язок інпуту і state
-                  value={name}
-                  onChange={handleInputChange}
-                  type="text"
-                  name="name"
-                  pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                  title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                  required
-                  id={this.nameInputId}
-                />
-              </div>
-              <div className={css.conactFormGroup}>
-                <label className="" htmlFor={this.numberInputId}>
-                  Number
-                </label>
-                <input
-                  className={css.input}
-                  // зв'язок інпуту і state
-                  value={number}
-                  onChange={handleInputChange}
-                  type="tel"
-                  name="number"
-                  pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                  title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                  required
-                  id={this.numberInputId}
-                />
-              </div>
-              <button className={css.btnAddContact} type="submit">
-                Add contact
-              </button>
-            </form>
-          </div>
-          <div className="">
-            <h2>Contacts</h2>
-            <div className={css.conactFormGroup}>
-              <label className="" htmlFor={this.filterInputId}>
-                Find contacts by name
-              </label>
-              <input
-                className={css.input}
-                // зв'язок інпуту і state
-                value={this.state.filter}
-                onChange={handleInputChange}
-                type="text"
-                name="filter"
-                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                required
-                id={this.filterInputId}
-              />
-            </div>
-            <ul className={css.listContact}>{itemsContacts}</ul>
-          </div>
-        </div>
+
+        <ContactForm onSubmit={handleSubmit} />
+        <h2>Contacts</h2>
+        <Filter
+          handleInputChange={handleFilter}
+          // filterInputId={this.filterInputId}
+          value={filter}
+        />
+        <ContactList contacts={contacts} removeContact={removeContact} />
       </div>
     );
   }
