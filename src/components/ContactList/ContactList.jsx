@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types';
 import css from './ContactList.module.css';
+
 const ContactList = ({ contacts, removeContact }) => {
   // mapаємо відфільтровані книги
   const itemsContacts = contacts.map(({ id, name, number }) => (
@@ -22,4 +24,15 @@ export default ContactList;
 // якщо є пустий масив - писати завжди  defaultProps
 ContactList.defaultProps = {
   contacts: [],
+};
+
+ContactList.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+  removeContact: PropTypes.func.isRequired,
 };

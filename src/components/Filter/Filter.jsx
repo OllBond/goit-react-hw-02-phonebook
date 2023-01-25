@@ -1,4 +1,7 @@
+import PropTypes from 'prop-types';
+
 import css from './Filter.module.css';
+
 const Filter = ({ handleInputChange, value }) => {
   return (
     <div className={css.conactFormGroup}>
@@ -19,3 +22,8 @@ const Filter = ({ handleInputChange, value }) => {
 };
 
 export default Filter;
+
+Filter.propTypes = {
+  handleInputChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+};

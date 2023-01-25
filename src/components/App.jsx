@@ -91,19 +91,18 @@ export class App extends Component {
     const { handleSubmit, handleFilter, removeContact } = this;
     const { filter } = this.state;
     const contacts = this.getFilteredContacts();
-
+    const isContacts = Boolean(contacts.length);
     return (
       <div>
         <h1 className={css.title}>Phonebook</h1>
 
         <ContactForm onSubmit={handleSubmit} />
         <h2 className={css.title}>Contacts</h2>
-        <Filter
-          handleInputChange={handleFilter}
-          // filterInputId={this.filterInputId}
-          value={filter}
-        />
-        <ContactList contacts={contacts} removeContact={removeContact} />
+        <Filter handleInputChange={handleFilter} value={filter} />
+        {isContacts && (
+          <ContactList contacts={contacts} removeContact={removeContact} />
+        )}
+        {!isContacts && <p>No contacts in list</p>}
       </div>
     );
   }
