@@ -18,9 +18,11 @@ export class ContactForm extends Component {
     event.preventDefault();
     const { onSubmit } = this.props;
     // onSubmit кладе state в корзинку, віддає наверх
-    onSubmit({ ...this.state });
-    // обнуляє
-    this.reset();
+    const result = onSubmit({ ...this.state });
+    if (result) {
+      // обнуляє
+      this.reset();
+    }
   };
   reset() {
     // обнуляє name і number

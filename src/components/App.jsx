@@ -16,9 +16,6 @@ export class App extends Component {
     ],
     filter: '',
   };
-  nameInputId = nanoid();
-  numberInput = nanoid();
-  filterInput = nanoid();
 
   handleFilter = ({ target }) => {
     this.setState({ filter: target.value });
@@ -27,7 +24,8 @@ export class App extends Component {
   // і повертає масив старих контактів і новий
   handleSubmit = ({ name, number }) => {
     if (this.isDublicate({ name, number })) {
-      return alert(`${name}: ${number} is already in contacts`);
+      alert(`${name}: ${number} is already in contacts`);
+      return false;
     }
     // тут callback бо хочемо змінити масив у state
     this.setState(prevState => {
@@ -54,16 +52,12 @@ export class App extends Component {
   };
   isDublicate({ name, number }) {
     const normalizedName = name.toLowerCase();
-    const normalizedNumber = number.toLowerCase();
     const { contacts } = this.state;
     // щоб знайти елемент в масиві
     // якщо знайщеться в contact буде об'єкт
     // якщо не здайде - undefind
-    const result = contacts.find(({ name, number }) => {
-      return (
-        name.toLowerCase() === normalizedName &&
-        number.toLowerCase() === normalizedNumber
-      );
+    const result = contacts.find(({ name }) => {
+      return name.toLowerCase() === normalizedName;
     });
     // на треба повернути або true або false
     // булеве значення об'єкта - true
