@@ -1,24 +1,27 @@
 import PropTypes from 'prop-types';
+import ContactItem from '../ContactItem/ContactItem';
 import css from './ContactList.module.css';
 
 const ContactList = ({ contacts, removeContact }) => {
-  // mapаємо відфільтровані книги
-  const itemsContacts = contacts.map(({ id, name, number }) => (
-    <li className={css.listItems} key={id}>
-      {name}: {number}
-      <button
-        className={css.btnDeleteContact}
-        // анонімна функція де передаємо id контакту, щоб знати,
-        // який контакт видаляти
-        onClick={() => removeContact(id)}
-        type="button"
-      >
-        Delete
-      </button>
-    </li>
-  ));
-  return <ul className={css.listContact}>{itemsContacts}</ul>;
+  return (
+    <ul className={css.listContact}>
+      {
+        // mapаємо відфільтровані контакти
+        contacts.map(({ id, name, number }) => {
+          return (
+            <ContactItem
+              key={id}
+              name={name}
+              number={number}
+              removeContact={() => removeContact(id)}
+            />
+          );
+        })
+      }
+    </ul>
+  );
 };
+
 export default ContactList;
 
 // якщо є пустий масив - писати завжди  defaultProps
@@ -34,5 +37,4 @@ ContactList.propTypes = {
       number: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
-  removeContact: PropTypes.func.isRequired,
 };
