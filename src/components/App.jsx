@@ -50,7 +50,7 @@ export class App extends Component {
       return { contacts: newContact };
     });
   };
-  isDublicate({ name, number }) {
+  isDublicate({ name }) {
     const normalizedName = name.toLowerCase();
     const { contacts } = this.state;
     // щоб знайти елемент в масиві
@@ -59,7 +59,7 @@ export class App extends Component {
     const result = contacts.find(({ name }) => {
       return name.toLowerCase() === normalizedName;
     });
-    // на треба повернути або true або false
+    // треба повернути або true або false
     // булеве значення об'єкта - true
     // булеве значення undefind - false
     return Boolean(result);
