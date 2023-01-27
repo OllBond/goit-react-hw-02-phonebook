@@ -17,9 +17,6 @@ export class App extends Component {
     filter: '',
   };
 
-  handleFilter = ({ target }) => {
-    this.setState({ filter: target.value });
-  };
   // функція створює новий контакт newContact
   // і повертає масив старих контактів і новий
   handleSubmit = ({ name, number }) => {
@@ -40,6 +37,7 @@ export class App extends Component {
       // і у value inputa потрапляє пуста стока
       return { contacts: [newContact, ...contacts] };
     });
+    return true;
   };
   removeContact = id => {
     this.setState(({ contacts }) => {
@@ -50,6 +48,11 @@ export class App extends Component {
       return { contacts: newContact };
     });
   };
+
+  handleFilter = ({ target }) => {
+    this.setState({ filter: target.value });
+  };
+
   isDublicate({ name }) {
     const normalizedName = name.toLowerCase();
     const { contacts } = this.state;
